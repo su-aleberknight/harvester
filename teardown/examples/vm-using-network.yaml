@@ -1,0 +1,28 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vm-with-dummy-net
+  namespace: default
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: vm-with-dummy-net
+    spec:
+      domain:
+        devices:
+          interfaces:
+          - name: dummy-net
+            bridge: {}
+        resources:
+          requests:
+            memory: 512M
+      networks:
+      - name: dummy-net
+        multus:
+          networkName: harvester-system/dummy-bridge-net
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: kubevirt/cirros-container-disk-demo:latest

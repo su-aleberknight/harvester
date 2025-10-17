@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dummy-bridge-ensure
+  namespace: kube-system
+  labels:
+    app: dummy-bridge-ensure
+spec:
+  selector:
+    matchLabels:
+      app: dummy-bridge-ensure
+  template:
+    metadata:
+      labels:
+        app: dummy-bridge-ensure
+    spec:
+      hostNetwork: true
+      hostPID: true
+      tolerations:
+      - operator: "Exists"
+      containers:
+      - name: ensure-bridge
+        image: REPLACE_WITH_DAEMON_BRIDGE_IMAGE
+        securityContext:
+          privileged: true
+        env:
+        - name: BRIDGE
+          value: "br-dummy"
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: lib-modules
+          readOnly: true
+      volumes:
+      - name: lib-modules
+        hostPath:
+          path: /lib/modules
+          type: Directory

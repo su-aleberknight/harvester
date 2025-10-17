@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-cluster-network-controller
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dummy-cluster-network-controller
+  template:
+    metadata:
+      labels:
+        app: dummy-cluster-network-controller
+    spec:
+      serviceAccountName: dummy-cluster-network-controller
+      containers:
+      - name: controller
+        image: REPLACE_WITH_CONTROLLER_IMAGE
+        args:
+        - --metrics-addr=:8080
+        - --health-probe-addr=:8081
+        env:
+        - name: WATCH_NAMESPACE
+          value: ""
+        ports:
+        - containerPort: 8080
+          name: metrics
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+        livenessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
