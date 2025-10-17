@@ -39,7 +39,7 @@ How to build / deploy (summary)
    - kubectl apply -f examples/dummyclusternetwork-example.yaml
 6. Create VM which references the NAD in the example.
 
-If you want, I can:
+Some thoughts on what else can be done:
 - Provide a patched deployment file with recommended resource requests/limits and liveness/readiness endpoints wired up.
 - Generate a small Makefile for building the two images and pushing them to a registry.
 - Create a small script to run simple integration checks (verify NAD exists, DaemonSet running, bridge exists on a node).
