@@ -1,6 +1,9 @@
-FROM alpine:3.18
+FROM registry.suse.com/bci/bci-base:15.5
 
-RUN apk add --no-cache iproute2 bash
+# Install required packages (iproute2, bash) and clean up
+RUN zypper -n refresh && \
+    zypper -n install -y iproute2 bash && \
+    zypper clean -a
 
 COPY create-bridge.sh /usr/local/bin/create-bridge.sh
 RUN chmod +x /usr/local/bin/create-bridge.sh
